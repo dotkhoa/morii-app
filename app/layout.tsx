@@ -1,3 +1,4 @@
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -13,7 +14,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <ClerkProvider>
+        <body>
+          <div>{children}</div>
+        </body>
+      </ClerkProvider>
     </html>
   );
 }
