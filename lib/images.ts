@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
 
 export async function uploadImage(
@@ -28,12 +29,16 @@ export async function uploadImage(
     const { error } = await client
       .from("images")
       .insert({ user_id: userId, file_path: filePath });
+    if (error) {
+      console.error(error);
+      return;
+    }
     toast.success("Image has successfully uploaded.");
     window.location.reload();
   }
 }
 
-export async function loadImageList(client: any, userId: string | undefined) {
+export async function loadImageList(client: any, userId: string | void) {
   const { data, error } = await client
     .from("images")
     .select("file_path")
@@ -46,13 +51,21 @@ export async function loadImageList(client: any, userId: string | undefined) {
   }
 }
 
-export async function getImageUrl(e: any, client: any, setImages: any) {
+type FileObject = {
+  file_path: string;
+};
+
+export async function getImageUrl(
+  images: FileObject[],
+  client: any,
+  setImages: Dispatch<SetStateAction<string[]>>,
+) {
   const imageUrl = [];
 
-  for (let i = 0; i < e.length; i++) {
+  for (let i = 0; i < images.length; i++) {
     const { error, data } = await client.storage
       .from("images")
-      .createSignedUrl(e[i]?.file_path, 60);
+      .createSignedUrl(images[i]?.file_path, 60);
 
     if (error) {
       console.error(error);

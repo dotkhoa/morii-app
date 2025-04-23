@@ -26,7 +26,7 @@ export default function Home() {
     };
 
     fetchImages();
-  }, [user]);
+  }, [user, userId]);
 
   return (
     <div>
