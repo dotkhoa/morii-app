@@ -1,11 +1,8 @@
 import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
+import { supabase } from "./auth";
 
-export async function uploadImage(
-  e: React.FormEvent<HTMLFormElement>,
-  client: any,
-  userId?: string,
-) {
+export async function uploadImageEdge(e: React.FormEvent<HTMLFormElement>) {
   e.preventDefault();
 
   const fileInput = e.currentTarget.elements.namedItem(
@@ -19,27 +16,30 @@ export async function uploadImage(
 
   const file = fileInput.files[0];
 
-  const filePath = `images/${crypto.randomUUID()}-${file.name}`;
+  if (file) {
+    const clientFormData = new FormData();
 
-  const { error } = await client.storage.from("images").upload(filePath, file);
+    clientFormData.append("file", file);
 
-  if (error) {
-    toast.error("Image has failed uploading.");
-  } else {
-    const { error } = await client
-      .from("images")
-      .insert({ user_id: userId, file_path: filePath });
-    if (error) {
-      console.error(error);
-      return;
+    const { data, error } = await supabase.functions.invoke("upload-image", {
+      body: clientFormData,
+    });
+
+    if (data.message) {
+      toast.error(data.message);
+    } else {
+      toast.success("Image upload successful!");
+      window.location.reload();
     }
-    toast.success("Image has successfully uploaded.");
-    window.location.reload();
+
+    if (error) {
+      toast.error(error);
+    }
   }
 }
 
-export async function loadImageList(client: any, userId: string | void) {
-  const { data, error } = await client
+export async function loadImageList(userId: string | void) {
+  const { data, error } = await supabase
     .from("images")
     .select("file_path")
     .eq("user_id", userId);
@@ -56,22 +56,23 @@ type FileObject = {
 };
 
 export async function getImageUrl(
-  images: FileObject[],
-  client: any,
+  images: FileObject[] | undefined,
   setImages: Dispatch<SetStateAction<string[]>>,
 ) {
   const imageUrl = [];
 
-  for (let i = 0; i < images.length; i++) {
-    const { error, data } = await client.storage
-      .from("images")
-      .createSignedUrl(images[i]?.file_path, 60);
+  if (images) {
+    for (let i = 0; i < images.length; i++) {
+      const { error, data } = await supabase.storage
+        .from("images")
+        .createSignedUrl(images[i]?.file_path, 60);
 
-    if (error) {
-      console.error(error);
-      return;
-    } else {
-      imageUrl.push(data?.signedUrl.toString());
+      if (error) {
+        console.error(error);
+        return;
+      } else {
+        imageUrl.push(data?.signedUrl.toString());
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-import { ClerkProvider } from "@clerk/nextjs";
+import { AuthProvider } from "@/lib/authContext";
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import "./globals.css";
@@ -15,12 +15,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ClerkProvider>
+      <AuthProvider>
         <body>
           <div>{children}</div>
           <Analytics />
         </body>
-      </ClerkProvider>
+      </AuthProvider>
     </html>
   );
 }

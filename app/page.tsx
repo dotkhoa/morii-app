@@ -1,28 +1,24 @@
 "use client";
-import { useEffect, useState } from "react";
-import { SignedIn, SignedOut, useSession, useUser } from "@clerk/nextjs";
+
 import Header from "@/components/header";
 import { Toaster } from "@/components/ui/sonner";
+import { useAuth } from "@/lib/authContext";
 import { getImageUrl, loadImageList } from "@/lib/images";
-import { createClerkSupabaseClient } from "@/lib/auth";
+import { useEffect, useState } from "react";
 import ImageGallery from "../components/imageGallery";
 import ImageUpload from "../components/imageUpload";
 
 export default function Home() {
+  const { user } = useAuth();
   const [images, setImages] = useState<string[]>([]);
-
-  const { user } = useUser();
   const userId = user?.id;
-
-  const { session } = useSession();
-  const client = createClerkSupabaseClient(session);
 
   useEffect(() => {
     if (!user) return;
 
     const fetchImages = async () => {
-      const images = await loadImageList(client, userId);
-      await getImageUrl(images, client, setImages);
+      const images = await loadImageList(userId);
+      await getImageUrl(images, setImages);
     };
 
     fetchImages();
@@ -31,18 +27,17 @@ export default function Home() {
   return (
     <div>
       <Header />
-      <SignedOut>
+      {user ? (
         <div className="mx-auto flex w-full max-w-screen-md flex-col items-center justify-between gap-8 px-4 text-xl">
-          You are signed out.
-        </div>
-      </SignedOut>
-      <SignedIn>
-        <div className="mx-auto flex w-full max-w-screen-md flex-col items-center justify-between gap-8 px-4 text-xl">
-          <ImageUpload client={client} userId={userId} />
+          <ImageUpload />
           <Toaster position={"top-center"} />
           <ImageGallery images={images} />
         </div>
-      </SignedIn>
+      ) : (
+        <div className="mx-auto flex w-full max-w-screen-md flex-col items-center justify-between gap-8 px-4 text-xl">
+          You are signed out.
+        </div>
+      )}
     </div>
   );
 }
