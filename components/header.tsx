@@ -1,9 +1,11 @@
-import { signInWithGoogle, signOut } from "@/lib/auth";
+import { signOut } from "@/lib/auth";
 import { useAuth } from "@/lib/authContext";
+import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 
 export default function Header() {
   const { user } = useAuth();
+  const router = useRouter();
   return (
     <header className="flex h-16 items-center justify-end gap-4 p-4">
       {user ? (
@@ -11,9 +13,14 @@ export default function Header() {
           {"Sign-Out"}
         </Button>
       ) : (
-        <Button className={"hover:cursor-pointer"} onClick={signInWithGoogle}>
-          {"Sign-In"}
-        </Button>
+        <div>
+          <Button
+            className={"hover:cursor-pointer"}
+            onClick={() => router.push("/login")}
+          >
+            {"Sign-In"}
+          </Button>
+        </div>
       )}
     </header>
   );
