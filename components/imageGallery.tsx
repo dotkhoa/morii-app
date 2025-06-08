@@ -1,10 +1,25 @@
+import { useAuth } from "@/lib/authContext";
+import { fetchImages } from "@/lib/images";
+import useImageStore from "@/store/imageStore";
 import Image from "next/image";
+import { useEffect } from "react";
 
-interface Props {
-  images: string[];
-}
+export default function ImageGallery() {
+  const { user } = useAuth();
+  const images = useImageStore((state) => state.image);
+  const { setImage } = useImageStore();
 
-export default function ImageGallery({ images }: Props) {
+  useEffect(() => {
+    if (!user) return;
+
+    const getImages = async () => {
+      const images = await fetchImages(user?.id);
+      setImage(images || []);
+    };
+
+    getImages();
+  }, [user]);
+
   return (
     <div className={"boarder-9 flex flex-wrap border-b-fuchsia-600"}>
       {images &&

@@ -1,8 +1,11 @@
-import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
 import { supabase } from "./auth";
 
-export async function uploadImageEdge(e: React.FormEvent<HTMLFormElement>) {
+export async function uploadImageEdge(
+  e: React.FormEvent<HTMLFormElement>,
+  userId: string | undefined,
+  setImage: (image: string[]) => void,
+) {
   e.preventDefault();
 
   const fileInput = e.currentTarget.elements.namedItem(
@@ -29,13 +32,20 @@ export async function uploadImageEdge(e: React.FormEvent<HTMLFormElement>) {
       toast.error(data.message);
     } else {
       toast.success("Image upload successful!");
-      window.location.reload();
+      const images = await fetchImages(userId);
+      setImage(images || []);
     }
 
     if (error) {
       toast.error(error);
     }
   }
+}
+
+export async function fetchImages(userId: string | undefined) {
+  const images = await loadImageList(userId);
+  const imageUrl = await getImageUrl(images);
+  return imageUrl;
 }
 
 export async function loadImageList(userId: string | void) {
@@ -55,10 +65,7 @@ type FileObject = {
   file_path: string;
 };
 
-export async function getImageUrl(
-  images: FileObject[] | undefined,
-  setImages: Dispatch<SetStateAction<string[]>>,
-) {
+export async function getImageUrl(images: FileObject[] | undefined) {
   const imageUrl = [];
 
   if (images) {
@@ -76,5 +83,5 @@ export async function getImageUrl(
     }
   }
 
-  setImages(imageUrl);
+  return imageUrl;
 }
