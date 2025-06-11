@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { toast } from "sonner";
 import { supabase } from "./auth";
 
@@ -44,7 +45,7 @@ export async function uploadImageEdge(
 
 export async function fetchImages(userId: string | undefined) {
   const images = await loadImageList(userId);
-  const imageUrl = await getImageUrl(images);
+  const imageUrl = await getSignegImageUrls(images);
   return imageUrl;
 }
 
@@ -61,27 +62,35 @@ export async function loadImageList(userId: string | void) {
   }
 }
 
-type FileObject = {
+interface FileObject {
   file_path: string;
-};
-
-export async function getImageUrl(images: FileObject[] | undefined) {
-  const imageUrl = [];
-
-  if (images) {
-    for (let i = 0; i < images.length; i++) {
-      const { error, data } = await supabase.storage
-        .from("images")
-        .createSignedUrl(images[i]?.file_path, 60);
-
-      if (error) {
-        console.error(error);
-        return;
-      } else {
-        imageUrl.push(data?.signedUrl.toString());
-      }
-    }
-  }
-
-  return imageUrl;
 }
+
+export const getSignegImageUrls = cache(
+  async (images: FileObject[] | undefined) => {
+    if (!images || images.length === 0) {
+      return [];
+    }
+
+    const imagePaths = images.map((image) => image.file_path);
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_URL}/api/image-urls`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imagePaths }),
+        next: {
+          revalidate: 3600,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to get signed URLs");
+    }
+
+    const { urls } = await response.json();
+    return urls as string[];
+  },
+);
