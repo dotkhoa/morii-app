@@ -4,11 +4,13 @@ import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 
 export default function Header() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
   return (
     <header className="flex h-16 items-center justify-end gap-4 p-4">
-      {user ? (
+      {loading ? (
+        <></>
+      ) : user ? (
         <Button className={"hover:cursor-pointer"} onClick={signOut}>
           {"Sign-Out"}
         </Button>

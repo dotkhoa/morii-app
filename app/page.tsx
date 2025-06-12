@@ -1,18 +1,20 @@
 "use client";
 
 import Header from "@/components/header";
+import ImageGallery from "@/components/imageGallery";
+import ImageUpload from "@/components/imageUpload";
 import { Toaster } from "@/components/ui/sonner";
 import { useAuth } from "@/lib/authContext";
-import ImageGallery from "../components/imageGallery";
-import ImageUpload from "../components/imageUpload";
 
 export default function Home() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   return (
     <div>
       <Toaster position={"bottom-right"} richColors />
       <Header />
-      {user ? (
+      {loading ? (
+        <></>
+      ) : user ? (
         <div className="mx-auto flex w-full max-w-screen-md flex-col items-center justify-between gap-8 px-4 text-xl">
           <ImageUpload />
           <ImageGallery />
