@@ -10,7 +10,7 @@ export default function Home() {
   const { user } = useAuth();
   return (
     <div>
-      <Toaster position={"top-center"} />
+      <Toaster position={"bottom-right"} richColors />
       <Header />
       {user ? (
         <div className="mx-auto flex w-full max-w-screen-md flex-col items-center justify-between gap-8 px-4 text-xl">
