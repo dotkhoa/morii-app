@@ -24,6 +24,7 @@ export async function uploadImageEdge(
 
   if (file.size > MAX_BYTES) {
     toast.warning("Image is larger than 1 MB");
+    return;
   }
 
   if (file) {
