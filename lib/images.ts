@@ -32,9 +32,16 @@ export async function uploadImageEdge(
 
     clientFormData.append("file", file);
 
-    const uploadPromise = supabase.functions.invoke("upload-image", {
-      body: clientFormData,
-    });
+    const uploadPromise = supabase.functions
+      .invoke("upload-image", {
+        body: clientFormData,
+      })
+      .then((res) => {
+        if (res.data.message) {
+          throw new Error(res.data.message);
+        }
+        return res.data;
+      });
 
     toast.promise(uploadPromise, {
       loading: "Uploading...",
@@ -47,7 +54,7 @@ export async function uploadImageEdge(
     const { data } = await uploadPromise;
 
     if (data.message) {
-      toast.error(data.message);
+      return;
     } else {
       const images = await fetchImages(userId);
       setImage(images || []);
