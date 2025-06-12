@@ -9,16 +9,22 @@ export async function uploadImageEdge(
 ) {
   e.preventDefault();
 
+  const MAX_BYTES = 1 * 1024 * 1024;
+
   const fileInput = e.currentTarget.elements.namedItem(
     "image",
   ) as HTMLInputElement;
 
   if (!fileInput.files || fileInput.files.length === 0) {
-    console.error("No file selected");
+    toast.warning("No image selected");
     return;
   }
 
   const file = fileInput.files[0];
+
+  if (file.size > MAX_BYTES) {
+    toast.warning("Image is larger than 1 MB");
+  }
 
   if (file) {
     const clientFormData = new FormData();
