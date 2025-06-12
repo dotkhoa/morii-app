@@ -31,13 +31,13 @@ export async function POST(request: Request) {
     },
   );
 
-  const signedUrlPromises = imagePaths.map((path) =>
+  const publicUrlPromises = imagePaths.map((path) =>
     supabase.storage.from("images").getPublicUrl(path),
   );
 
-  const signedUrlResults = await Promise.all(signedUrlPromises);
+  const publicUrlResults = await Promise.all(publicUrlPromises);
 
-  const urls = signedUrlResults.map((results) => {
+  const urls = publicUrlResults.map((results) => {
     return results.data.publicUrl;
   });
   return NextResponse.json({ urls });
