@@ -32,17 +32,13 @@ export async function POST(request: Request) {
   );
 
   const signedUrlPromises = imagePaths.map((path) =>
-    supabase.storage.from("images").createSignedUrl(path, 3600),
+    supabase.storage.from("images").getPublicUrl(path),
   );
 
   const signedUrlResults = await Promise.all(signedUrlPromises);
 
   const urls = signedUrlResults.map((results) => {
-    if (results.error) {
-      console.error("Error generating signed URL:", results.error.message);
-      return null;
-    }
-    return results.data.signedUrl;
+    return results.data.publicUrl;
   });
   return NextResponse.json({ urls });
 }
