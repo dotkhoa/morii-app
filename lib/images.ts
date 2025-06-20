@@ -159,7 +159,7 @@ export async function deleteImage(
     console.error("DB delete failed for", badDb.id, badDb.error);
     return;
   }
-  toast.success("Image(s) deleted from database.");
+  toast.success("Image(s) deleted successfully.");
   const refreshed = await fetchImages(userId);
   setImage(refreshed || []);
   clearSelectedIds();
