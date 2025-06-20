@@ -1,13 +1,18 @@
 import { create } from "zustand";
 
-interface imageState {
-  image: string[];
-  setImage: (image: string[]) => void;
+export interface Images {
+  id: string;
+  url: string;
+  path: string;
+}
+interface ImageState {
+  image: Images[];
+  setImage: (image: Images[]) => void;
 }
 
-const useImageStore = create<imageState>((set) => ({
+const useImageStore = create<ImageState>((set) => ({
   image: [],
-  setImage: (value: string[]) => set({ image: value }),
+  setImage: (value: Images[]) => set({ image: value }),
 }));
 
 export default useImageStore;

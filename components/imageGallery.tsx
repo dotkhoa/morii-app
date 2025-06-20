@@ -1,18 +1,23 @@
 import { useAuth } from "@/lib/authContext";
 import { fetchImages } from "@/lib/images";
+import type { Images } from "@/store/imageStore";
 import useImageStore from "@/store/imageStore";
+import useSelectedStore from "@/store/selectedStore";
 import Image from "next/image";
 import { useEffect } from "react";
+import { Checkbox } from "./ui/checkbox";
 
 export default function ImageGallery() {
   const { user } = useAuth();
   const images = useImageStore((state) => state.image);
   const { setImage } = useImageStore();
+  const { selectedIds, toggle, clearSelectedIds } = useSelectedStore();
 
   useEffect(() => {
     if (!user) return;
 
     const getImages = async () => {
+      clearSelectedIds();
       const images = await fetchImages(user?.id);
       setImage(images || []);
     };
@@ -21,18 +26,17 @@ export default function ImageGallery() {
   }, [user]);
 
   return (
-    <div className={"boarder-9 flex flex-wrap border-b-fuchsia-600"}>
+    <div className={"grid grid-cols-3 flex-wrap border-9"}>
       {images &&
         images.length > 0 &&
-        images.map((image: string, index: number) => (
-          <Image
-            key={index}
-            alt=""
-            src={image}
-            height={200}
-            width={200}
-            priority
-          />
+        images.map((image: Images, index: number) => (
+          <label key={index}>
+            <Checkbox
+              checked={selectedIds.has(image)}
+              onCheckedChange={() => toggle(image)}
+            />
+            <Image alt="" src={image.url} height={200} width={200} priority />
+          </label>
         ))}
     </div>
   );
