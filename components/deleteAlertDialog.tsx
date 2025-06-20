@@ -9,11 +9,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alertDialog";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { useAuth } from "@/lib/authContext";
 import { deleteImage } from "@/lib/images";
 import useImageStore from "@/store/imageStore";
 import useSelectedStore from "@/store/selectedStore";
+import { Trash2 } from "lucide-react";
 
 export function DeleteAlertDialog() {
   const { user } = useAuth();
@@ -23,8 +24,8 @@ export function DeleteAlertDialog() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button disabled={selectedIds.size === 0} variant={"destructive"}>
-          Delete
+        <Button disabled={selectedIds.size === 0}>
+          <Trash2 />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -38,6 +39,7 @@ export function DeleteAlertDialog() {
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
+            className={buttonVariants({ variant: "destructive" })}
             onClick={() => {
               deleteImage(
                 user?.id,
@@ -47,7 +49,7 @@ export function DeleteAlertDialog() {
               );
             }}
           >
-            Continue
+            Delete
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
