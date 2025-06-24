@@ -6,6 +6,7 @@ import { supabase } from "./auth";
 export async function uploadImageEdge(
   e: React.FormEvent<HTMLFormElement>,
   userId: string | undefined,
+  image: Images[],
   setImage: (image: Images[]) => void,
 ) {
   e.preventDefault();
@@ -18,6 +19,13 @@ export async function uploadImageEdge(
 
   if (!fileInput.files || fileInput.files.length === 0) {
     toast.warning("No image selected");
+    return;
+  }
+
+  if (image.length >= 10) {
+    toast.warning(
+      `You’ve reached the 10-image limit. Please delete at least one image to upload more.`,
+    );
     return;
   }
 

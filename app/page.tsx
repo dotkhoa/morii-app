@@ -15,12 +15,12 @@ export default function Home() {
       {loading ? (
         <></>
       ) : user ? (
-        <div className="mx-auto flex w-full max-w-screen-md flex-col items-center justify-between gap-8 px-4 text-xl">
+        <div className="mx-auto flex w-full max-w-screen-md flex-col items-center gap-8 px-4 text-xl">
           <ImageUpload />
           <ImageGallery />
         </div>
       ) : (
-        <div className="mx-auto flex w-full max-w-screen-md flex-col items-center justify-between gap-8 px-4 text-xl">
+        <div className="mx-auto flex w-full max-w-screen-md flex-col items-center gap-8 px-4 text-xl">
           You are signed out.
         </div>
       )}

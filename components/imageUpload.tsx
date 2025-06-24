@@ -7,11 +7,11 @@ import { DeleteAlertDialog } from "./deleteAlertDialog";
 
 export default function ImageUpload() {
   const { user } = useAuth();
-  const { setImage } = useImageStore();
+  const { image, setImage } = useImageStore();
 
   return (
     <div>
-      <form onSubmit={(e) => uploadImageEdge(e, user?.id, setImage)}>
+      <form onSubmit={(e) => uploadImageEdge(e, user?.id, image, setImage)}>
         <div className="flex">
           <Input id="picture" type="file" accept="image/*" name="image" />
           <Button className={"ml-2 hover:cursor-pointer"} type="submit">
