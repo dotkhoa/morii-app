@@ -36,14 +36,14 @@ export default function ImageGallery() {
       >{`${imageCount}/10`}</Button>
       <div
         className={
-          "grid auto-rows-[10rem] grid-cols-2 gap-2 border-9 md:auto-rows-[12rem] md:grid-cols-3 lg:auto-rows-[10rem] lg:grid-cols-4"
+          "grid w-full grid-cols-2 gap-2 border-9 md:grid-cols-3 lg:grid-cols-4"
         }
       >
         {images &&
           images.length > 0 &&
           images.map((image: Images, index: number) => (
             <label
-              className="group relative aspect-square h-full w-full overflow-hidden"
+              className="group relative aspect-square overflow-hidden"
               key={index}
             >
               <div
@@ -57,9 +57,10 @@ export default function ImageGallery() {
               <Image
                 alt=""
                 src={image.url}
-                style={{ objectFit: "cover" }}
                 fill
+                className="object-cover"
                 priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             </label>
           ))}
