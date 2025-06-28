@@ -1,25 +1,12 @@
 import { createServerClient } from "@supabase/ssr";
-import { checkBotId } from "botid/server";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function OPTIONS() {
-  const verification = await checkBotId();
-
-  if (verification.isBot) {
-    return NextResponse.json({ error: "Access denied" }, { status: 403 });
-  }
-
   return new NextResponse(null, { status: 204 });
 }
 
 export async function POST(request: Request) {
-  const verification = await checkBotId();
-
-  if (verification.isBot) {
-    return NextResponse.json({ error: "Access denied" }, { status: 403 });
-  }
-
   const { imagePaths } = await request.json();
 
   if (!Array.isArray(imagePaths) || imagePaths.length === 0) {
