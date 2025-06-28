@@ -29,21 +29,38 @@ export default function ImageGallery() {
   }, [user]);
 
   return (
-    <div className="flex flex-col items-end">
+    <div className="flex w-full max-w-[50rem] flex-col items-center px-4">
       <Button
         className="mb-2 w-16"
         variant="outline"
       >{`${imageCount}/10`}</Button>
-      <div className={"grid grid-cols-3 flex-wrap border-9"}>
+      <div
+        className={
+          "grid auto-rows-[10rem] grid-cols-2 gap-2 border-9 md:auto-rows-[12rem] md:grid-cols-3 lg:auto-rows-[10rem] lg:grid-cols-4"
+        }
+      >
         {images &&
           images.length > 0 &&
           images.map((image: Images, index: number) => (
-            <label key={index}>
-              <Checkbox
-                checked={selectedIds.has(image)}
-                onCheckedChange={() => toggle(image)}
+            <label
+              className="group relative aspect-square h-full w-full overflow-hidden"
+              key={index}
+            >
+              <div
+                className={`absolute top-2 right-2 z-10 transition-opacity ${selectedIds.has(image) ? "opacity-100" : "opacity-0"} group-hover:opacity-100`}
+              >
+                <Checkbox
+                  checked={selectedIds.has(image)}
+                  onCheckedChange={() => toggle(image)}
+                />
+              </div>
+              <Image
+                alt=""
+                src={image.url}
+                style={{ objectFit: "cover" }}
+                fill
+                priority
               />
-              <Image alt="" src={image.url} height={200} width={200} priority />
             </label>
           ))}
       </div>
