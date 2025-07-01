@@ -3,8 +3,8 @@ import { fetchImages } from "@/lib/images";
 import type { Images } from "@/store/imageStore";
 import useImageStore from "@/store/imageStore";
 import useSelectedStore from "@/store/selectedStore";
-import Image from "next/image";
 import { useEffect } from "react";
+import ManagedImage from "./ManagedImage";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 
@@ -29,14 +29,14 @@ export default function ImageGallery() {
   }, [user]);
 
   return (
-    <div className="flex w-full max-w-[50rem] flex-col items-center px-4">
+    <div className="mb-8 flex w-full max-w-[50rem] flex-col items-center px-4">
       <Button
         className="mb-2 w-16"
         variant="outline"
       >{`${imageCount}/10`}</Button>
       <div
         className={
-          "grid w-full grid-cols-2 gap-2 border-9 md:grid-cols-3 lg:grid-cols-4"
+          "grid w-full grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4"
         }
       >
         {images &&
@@ -54,12 +54,11 @@ export default function ImageGallery() {
                   onCheckedChange={() => toggle(image)}
                 />
               </div>
-              <Image
-                alt=""
+              <ManagedImage
                 src={image.url}
                 fill
-                className="object-cover"
                 priority
+                className="object-cover select-none"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             </label>
