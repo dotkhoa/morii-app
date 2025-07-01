@@ -47,9 +47,10 @@ export default function ImageGallery() {
               key={index}
             >
               <div
-                className={`absolute top-2 right-2 z-10 transition-opacity ${selectedIds.has(image) ? "opacity-100" : "opacity-0"} group-hover:opacity-100`}
+                className={`transition-opacity ${selectedIds.has(image) ? "opacity-100" : "opacity-0"} group-hover:opacity-100`}
               >
                 <Checkbox
+                  className="absolute top-2 right-2 z-10"
                   checked={selectedIds.has(image)}
                   onCheckedChange={() => toggle(image)}
                 />
