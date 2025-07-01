@@ -1,4 +1,4 @@
-import { LoginForm } from "@/components/loginForm";
+import { LoginForm } from "@/components/LoginForm";
 import { Aperture } from "lucide-react";
 import Link from "next/link";
 

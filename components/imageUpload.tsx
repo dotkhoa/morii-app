@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/lib/authContext";
 import { uploadImageEdge } from "@/lib/images";
 import useImageStore from "@/store/imageStore";
-import { DeleteAlertDialog } from "./deleteAlertDialog";
+import { DeleteAlertDialog } from "./DeleteAlertDialog";
 
 export default function ImageUpload() {
   const { user } = useAuth();

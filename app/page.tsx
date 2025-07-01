@@ -1,8 +1,8 @@
 "use client";
 
-import Header from "@/components/header";
-import ImageGallery from "@/components/imageGallery";
-import ImageUpload from "@/components/imageUpload";
+import Header from "@/components/Header";
+import ImageGallery from "@/components/ImageGallery";
+import ImageUpload from "@/components/ImageUpload";
 import { Toaster } from "@/components/ui/sonner";
 import { useAuth } from "@/lib/authContext";
 
