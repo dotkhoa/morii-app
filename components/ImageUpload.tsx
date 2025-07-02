@@ -30,11 +30,11 @@ export default function ImageUploaded() {
           Upload
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[750px]">
+      <DialogContent className="flex flex-col">
         <DialogHeader>
           <DialogTitle></DialogTitle>
         </DialogHeader>
-        <Dropzone {...props}>
+        <Dropzone {...props} className="flex-1">
           <DropzoneEmptyState />
           <DropzoneContent />
         </Dropzone>
