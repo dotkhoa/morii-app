@@ -157,8 +157,8 @@ const DropzoneContent = ({ className }: { className?: string }) => {
                   Uploading file...
                 </p>
               ) : !!fileError ? (
-                <p className="text-xs text-destructive">
-                  Failed to upload: {fileError.message}
+                <p className="text-left text-xs text-wrap text-destructive">
+                  {fileError.message}
                 </p>
               ) : isSuccessfullyUploaded ? (
                 <p className="text-xs text-primary">
