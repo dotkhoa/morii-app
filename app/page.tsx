@@ -2,7 +2,7 @@
 
 import Header from "@/components/Header";
 import ImageGallery from "@/components/ImageGallery";
-import ImageUpload from "@/components/ImageUpload";
+import Toolbar from "@/components/Toolbar";
 import { Toaster } from "@/components/ui/sonner";
 import { useAuth } from "@/lib/authContext";
 
@@ -16,7 +16,7 @@ export default function Home() {
         <></>
       ) : user ? (
         <div className="mx-auto flex w-full max-w-screen-md flex-col items-center gap-8 px-4 text-xl">
-          <ImageUpload />
+          <Toolbar />
           <ImageGallery />
         </div>
       ) : (

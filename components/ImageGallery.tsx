@@ -5,7 +5,6 @@ import useImageStore from "@/store/imageStore";
 import useSelectedStore from "@/store/selectedStore";
 import { useEffect } from "react";
 import ManagedImage from "./ManagedImage";
-import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 
 export default function ImageGallery() {
@@ -13,8 +12,6 @@ export default function ImageGallery() {
   const images = useImageStore((state) => state.image);
   const { setImage } = useImageStore();
   const { selectedIds, toggle, clearSelectedIds } = useSelectedStore();
-
-  const imageCount = images.length;
 
   useEffect(() => {
     if (!user) return;
@@ -30,10 +27,6 @@ export default function ImageGallery() {
 
   return (
     <div className="mb-8 flex w-full max-w-[50rem] flex-col items-center px-4">
-      <Button
-        className="mb-2 w-16"
-        variant="outline"
-      >{`${imageCount}/10`}</Button>
       <div
         className={
           "grid w-full grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4"
