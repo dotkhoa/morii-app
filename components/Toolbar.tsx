@@ -1,13 +1,26 @@
 import { Button } from "@/components/ui/button";
 import useImageStore from "@/store/imageStore";
+import { useEffect, useState } from "react";
 import { DeleteAlertDialog } from "./DeleteAlertDialog";
 import ImageUpload from "./ImageUpload";
 import { Separator } from "./ui/separator";
 
 export default function Toolbar() {
   const { image } = useImageStore();
+  const [imageCount, setImageCount] = useState<string>("");
 
-  const imageCount = image.length;
+  useEffect(() => {
+    if (image.length === 0) {
+      setImageCount("--");
+    } else {
+      const imageCount = image.length;
+      if (imageCount < 10) {
+        setImageCount(imageCount.toString().padStart(2, "0"));
+      } else {
+        setImageCount(imageCount.toString());
+      }
+    }
+  }, [image]);
 
   return (
     <div className="flex w-full justify-between px-4">
