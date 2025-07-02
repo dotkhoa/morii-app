@@ -11,7 +11,7 @@ export default function Toolbar() {
 
   useEffect(() => {
     if (image.length === 0) {
-      setImageCount("--");
+      setImageCount("00");
     } else {
       const imageCount = image.length;
       if (imageCount < 10) {
@@ -25,7 +25,10 @@ export default function Toolbar() {
   return (
     <div className="flex w-full justify-between px-4">
       <div>
-        <Button className="w-16" variant="outline">{`${imageCount}/10`}</Button>
+        <Button
+          className="w-16 font-mono"
+          variant="outline"
+        >{`${imageCount}/10`}</Button>
       </div>
       <div className="flex items-center justify-between">
         <DeleteAlertDialog />
