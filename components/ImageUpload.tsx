@@ -25,7 +25,7 @@ export default function ImageUploaded() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className={"ml-2 hover:cursor-pointer"} type="submit">
+        <Button className={"hover:cursor-pointer"} type="submit">
           <Plus />
           Upload
         </Button>
