@@ -10,7 +10,7 @@ export default function Home() {
   const { user, loading } = useAuth();
   return (
     <div>
-      <Toaster position={"bottom-right"} richColors />
+      <Toaster position={"bottom-right"} richColors visibleToasts={10} />
       <Header />
       {loading ? (
         <></>

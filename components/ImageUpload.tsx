@@ -1,8 +1,7 @@
 import { Upload } from "@/hooks/image-upload";
-import { useAuth } from "@/lib/authContext";
-import { fetchImages } from "@/lib/images";
 import useImageStore from "@/store/imageStore";
 import { Plus } from "lucide-react";
+import { useState } from "react";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -14,8 +13,9 @@ import {
 import { Dropzone, DropzoneContent, DropzoneEmptyState } from "./ui/dropzone";
 
 export default function ImageUploaded() {
-  const { image, setImage } = useImageStore();
-  const { user } = useAuth();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const { image } = useImageStore();
 
   const imageCount = image.length;
 
@@ -23,19 +23,16 @@ export default function ImageUploaded() {
     allowedMimeTypes: ["image/*"],
     maxFiles: 10 - imageCount,
     maxFileSize: 1000 * 1000 * 1, // 1MB,
+    setIsOpen,
   });
 
-  const handleOpenChange = async (open: any) => {
-    if (!open) {
-      const images = await fetchImages(user?.id);
-      setImage(images || []);
-    }
-  };
-
   return (
-    <Dialog onOpenChange={handleOpenChange}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className={"hover:cursor-pointer"} type="submit">
+        <Button
+          className={"hover:cursor-pointer"}
+          onClick={() => setIsOpen(true)}
+        >
           <Plus />
           Upload
         </Button>

@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { UploadReturn } from "@/hooks/image-upload";
 import { cn } from "@/lib/utils";
-import { CheckCircle, File, Loader2, Upload, X } from "lucide-react";
+import { File, Loader2, Upload, X } from "lucide-react";
 import Image from "next/image";
 import {
   createContext,
@@ -47,11 +47,10 @@ const Dropzone = ({
   getInputProps,
   ...restProps
 }: PropsWithChildren<DropzoneProps>) => {
-  const isSuccess = restProps.isSuccess;
   const isActive = restProps.isDragActive;
   const isInvalid =
     (restProps.isDragActive && restProps.isDragReject) ||
-    (restProps.errors.length > 0 && !restProps.isSuccess) ||
+    restProps.errors.length > 0 ||
     restProps.files.some((file) => file.errors.length !== 0);
 
   return (
@@ -61,7 +60,6 @@ const Dropzone = ({
           className: cn(
             "border-2 border-gray-300 rounded-lg p-6 text-center bg-card transition-colors duration-300 text-foreground",
             className,
-            isSuccess ? "border-solid" : "border-dashed",
             isActive && "border-primary bg-primary/10",
             isInvalid && "border-destructive bg-destructive/10",
           ),
@@ -74,17 +72,8 @@ const Dropzone = ({
   );
 };
 const DropzoneContent = ({ className }: { className?: string }) => {
-  const {
-    files,
-    setFiles,
-    onUpload,
-    loading,
-    successes,
-    errors,
-    maxFileSize,
-    maxFiles,
-    isSuccess,
-  } = useDropzoneContext();
+  const { files, setFiles, onUpload, loading, errors, maxFileSize, maxFiles } =
+    useDropzoneContext();
 
   const exceedMaxFiles = files.length > maxFiles;
 
@@ -95,27 +84,10 @@ const DropzoneContent = ({ className }: { className?: string }) => {
     [files, setFiles],
   );
 
-  if (isSuccess) {
-    return (
-      <div
-        className={cn(
-          "flex flex-row items-center justify-center gap-x-2",
-          className,
-        )}
-      >
-        <CheckCircle size={16} className="text-primary" />
-        <p className="text-sm text-primary">
-          Successfully uploaded {files.length} file{files.length > 1 ? "s" : ""}
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div className={cn("flex flex-col", className)}>
       {files.map((file, idx) => {
         const fileError = errors.find((e) => e.name === file.name);
-        const isSuccessfullyUploaded = !!successes.find((e) => e === file.name);
 
         return (
           <div
@@ -152,17 +124,13 @@ const DropzoneContent = ({ className }: { className?: string }) => {
                     )
                     .join(", ")}
                 </p>
-              ) : loading && !isSuccessfullyUploaded ? (
+              ) : loading ? (
                 <p className="text-xs text-muted-foreground">
-                  Uploading file...
+                  Uploading image...
                 </p>
               ) : !!fileError ? (
                 <p className="text-left text-xs text-wrap text-destructive">
                   {fileError.message}
-                </p>
-              ) : isSuccessfullyUploaded ? (
-                <p className="text-xs text-primary">
-                  Successfully uploaded file
                 </p>
               ) : (
                 <p className="text-xs text-muted-foreground">
@@ -171,7 +139,7 @@ const DropzoneContent = ({ className }: { className?: string }) => {
               )}
             </div>
 
-            {!loading && !isSuccessfullyUploaded && (
+            {!loading && (
               <Button
                 size="icon"
                 variant="link"
@@ -186,8 +154,8 @@ const DropzoneContent = ({ className }: { className?: string }) => {
       })}
       {exceedMaxFiles && (
         <p className="mt-2 text-left text-sm text-destructive">
-          You may upload only up to {maxFiles} files, please remove{" "}
-          {files.length - maxFiles} file
+          You may upload only up to 10 images, please remove{" "}
+          {files.length - maxFiles} image
           {files.length - maxFiles > 1 ? "s" : ""}.
         </p>
       )}
@@ -204,7 +172,7 @@ const DropzoneContent = ({ className }: { className?: string }) => {
                 Uploading...
               </>
             ) : (
-              <>Upload files</>
+              <>Upload images</>
             )}
           </Button>
         </div>
@@ -214,17 +182,13 @@ const DropzoneContent = ({ className }: { className?: string }) => {
 };
 
 const DropzoneEmptyState = ({ className }: { className?: string }) => {
-  const { maxFiles, maxFileSize, inputRef, isSuccess } = useDropzoneContext();
-
-  if (isSuccess) {
-    return null;
-  }
+  const { maxFiles, maxFileSize, inputRef } = useDropzoneContext();
 
   return (
     <div className={cn("flex flex-col items-center gap-y-2", className)}>
       <Upload size={20} className="text-muted-foreground" />
       <p className="text-sm">
-        Upload up to{!!maxFiles && maxFiles > 1 ? ` ${maxFiles}` : ""} file
+        Upload up to{!!maxFiles && maxFiles > 0 ? ` ${maxFiles}` : ""} image
         {!maxFiles || maxFiles > 1 ? "s" : ""}
       </p>
       <div className="flex flex-col items-center gap-y-1">
@@ -234,13 +198,13 @@ const DropzoneEmptyState = ({ className }: { className?: string }) => {
             onClick={() => inputRef.current?.click()}
             className="cursor-pointer underline transition hover:text-foreground"
           >
-            select {maxFiles === 1 ? `file` : "files"}
+            select {maxFiles === 1 ? `image` : "images"}
           </a>{" "}
           to upload
         </p>
         {maxFileSize !== Number.POSITIVE_INFINITY && (
           <p className="text-xs text-muted-foreground">
-            Maximum file size: {formatBytes(maxFileSize, 2)}
+            Maximum image size: {formatBytes(maxFileSize, 2)}
           </p>
         )}
       </div>

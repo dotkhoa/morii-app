@@ -1,10 +1,14 @@
 import { supabase } from "@/lib/auth";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useAuth } from "@/lib/authContext";
+import { fetchImages } from "@/lib/images";
+import useImageStore from "@/store/imageStore";
+import { useCallback, useEffect, useState } from "react";
 import {
   type FileError,
   type FileRejection,
   useDropzone,
 } from "react-dropzone";
+import { toast } from "sonner";
 
 interface FileWithPreview extends File {
   preview?: string;
@@ -26,6 +30,7 @@ type UploadOptions = {
    * Maximum number of files allowed per upload.
    */
   maxFiles?: number;
+  setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 type UploadReturn = ReturnType<typeof Upload>;
@@ -35,22 +40,15 @@ const Upload = (options: UploadOptions) => {
     allowedMimeTypes = [],
     maxFileSize = Number.POSITIVE_INFINITY,
     maxFiles = 1,
+    setIsOpen,
   } = options;
 
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<{ name: string; message: string }[]>([]);
-  const [successes, setSuccesses] = useState<string[]>([]);
 
-  const isSuccess = useMemo(() => {
-    if (errors.length === 0 && successes.length === 0) {
-      return false;
-    }
-    if (errors.length === 0 && successes.length === files.length) {
-      return true;
-    }
-    return false;
-  }, [errors.length, successes.length, files.length]);
+  const { user } = useAuth();
+  const { setImage } = useImageStore();
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -95,10 +93,7 @@ const Upload = (options: UploadOptions) => {
     const filesWithErrors = errors.map((x) => x.name);
     const filesToUpload =
       filesWithErrors.length > 0
-        ? [
-            ...files.filter((f) => filesWithErrors.includes(f.name)),
-            ...files.filter((f) => !successes.includes(f.name)),
-          ]
+        ? [...files.filter((f) => filesWithErrors.includes(f.name))]
         : files;
 
     const responses = await Promise.all(
@@ -123,14 +118,23 @@ const Upload = (options: UploadOptions) => {
     // if there were errors previously, this function tried to upload the files again so we should clear/overwrite the existing errors.
     setErrors(responseErrors);
 
+    setIsOpen?.(false);
+
     const responseSuccesses = responses.filter((x) => x.message === undefined);
-    const newSuccesses = Array.from(
-      new Set([...successes, ...responseSuccesses.map((x) => x.name)]),
+    responseSuccesses.map((x) =>
+      toast.success(`${x.name} uploaded successfully.`),
     );
-    setSuccesses(newSuccesses);
+    const newFiles = files.filter(
+      (x) => !responseSuccesses.map((s) => s.name).includes(x.name),
+    );
+
+    setFiles(newFiles);
+
+    const images = await fetchImages(user?.id);
+    setImage(images || []);
 
     setLoading(false);
-  }, [files, errors, successes]);
+  }, [files, errors]);
 
   useEffect(() => {
     if (files.length === 0) {
@@ -156,8 +160,6 @@ const Upload = (options: UploadOptions) => {
   return {
     files,
     setFiles,
-    successes,
-    isSuccess,
     loading,
     errors,
     setErrors,
