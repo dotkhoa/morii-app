@@ -72,16 +72,25 @@ const Dropzone = ({
   );
 };
 const DropzoneContent = ({ className }: { className?: string }) => {
-  const { files, setFiles, onUpload, loading, errors, maxFileSize, maxFiles } =
-    useDropzoneContext();
+  const {
+    files,
+    setFiles,
+    onUpload,
+    loading,
+    errors,
+    setErrors,
+    maxFileSize,
+    maxFiles,
+  } = useDropzoneContext();
 
   const exceedMaxFiles = files.length > maxFiles;
 
   const handleRemoveFile = useCallback(
     (fileName: string) => {
       setFiles(files.filter((file) => file.name !== fileName));
+      setErrors(errors.filter((error) => error.name !== fileName));
     },
-    [files, setFiles],
+    [files, setFiles, errors, setErrors],
   );
 
   return (
@@ -164,7 +173,7 @@ const DropzoneContent = ({ className }: { className?: string }) => {
           <Button
             variant="outline"
             onClick={onUpload}
-            disabled={files.some((file) => file.errors.length !== 0) || loading}
+            disabled={errors.length > 0 || loading}
           >
             {loading ? (
               <>

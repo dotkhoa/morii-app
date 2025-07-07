@@ -16,19 +16,8 @@ interface FileWithPreview extends File {
 }
 
 type UploadOptions = {
-  /**
-   * Allowed MIME types for each file upload (e.g `image/png`, `text/html`, etc). Wildcards are also supported (e.g `image/*`).
-   *
-   * Defaults to allowing uploading of all MIME types.
-   */
   allowedMimeTypes?: string[];
-  /**
-   * Maximum upload size of each file allowed in bytes. (e.g 1000 bytes = 1 KB)
-   */
   maxFileSize?: number;
-  /**
-   * Maximum number of files allowed per upload.
-   */
   maxFiles?: number;
   setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -118,8 +107,6 @@ const Upload = (options: UploadOptions) => {
     // if there were errors previously, this function tried to upload the files again so we should clear/overwrite the existing errors.
     setErrors(responseErrors);
 
-    setIsOpen?.(false);
-
     const responseSuccesses = responses.filter((x) => x.message === undefined);
     responseSuccesses.map((x) =>
       toast.success(`${x.name} uploaded successfully.`),
@@ -127,6 +114,10 @@ const Upload = (options: UploadOptions) => {
     const newFiles = files.filter(
       (x) => !responseSuccesses.map((s) => s.name).includes(x.name),
     );
+
+    if (responseErrors.length === 0) {
+      setIsOpen?.(false);
+    }
 
     setFiles(newFiles);
 
