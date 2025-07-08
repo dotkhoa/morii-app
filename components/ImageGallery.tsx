@@ -14,6 +14,8 @@ export default function ImageGallery() {
   const { setImage } = useImageStore();
   const { selectedIds, toggle, clearSelectedIds } = useSelectedStore();
 
+  const storedFlag = JSON.parse(localStorage.getItem("hasImages") ?? "null");
+
   useEffect(() => {
     if (!user) return;
 
@@ -28,7 +30,7 @@ export default function ImageGallery() {
 
   return (
     <div className="mb-8 flex w-full max-w-[50rem] flex-col items-center px-4">
-      {Array.isArray(images) && images.length > 0 ? (
+      {images.length > 0 || storedFlag === true ? (
         <div
           className={
             "grid w-full grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4"

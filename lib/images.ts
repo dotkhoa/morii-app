@@ -81,6 +81,10 @@ export async function fetchImages(userId: string | undefined) {
     url: imageUrl[i],
   }));
 
+  if (mergedImage) {
+    localStorage.setItem("hasImages", JSON.stringify(mergedImage.length > 0));
+  }
+
   return mergedImage;
 }
 
@@ -166,6 +170,9 @@ export async function deleteImage(
   if (badDb) {
     console.error("DB delete failed for", badDb.id, badDb.error);
     return;
+  }
+  if (images.length < 1) {
+    localStorage.setItem("hasImages", "false");
   }
   toast.success("Image(s) deleted successfully.");
   const refreshed = await fetchImages(userId);

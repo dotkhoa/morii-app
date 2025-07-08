@@ -10,6 +10,8 @@ export default function Toolbar() {
   const { image } = useImageStore();
   const [imageCount, setImageCount] = useState<string>("");
 
+  const storedFlag = JSON.parse(localStorage.getItem("hasImages") ?? "null");
+
   useEffect(() => {
     if (image.length === 0) {
       setImageCount("00");
@@ -26,10 +28,14 @@ export default function Toolbar() {
   return (
     <div className="flex w-full justify-between px-4">
       <div>
-        <Button
-          className="w-16 font-mono"
-          variant="outline"
-        >{`${imageCount}/10`}</Button>
+        {storedFlag ? (
+          <Button
+            className="w-16 font-mono"
+            variant="outline"
+          >{`${imageCount}/10`}</Button>
+        ) : (
+          <></>
+        )}
       </div>
       <div className="flex items-center justify-between">
         <DeleteAlertDialog />
