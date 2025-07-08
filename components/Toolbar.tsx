@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import useImageStore from "@/store/imageStore";
 import { useEffect, useState } from "react";
+import { ArcherElement } from "react-archer";
 import { DeleteAlertDialog } from "./DeleteAlertDialog";
 import ImageUpload from "./ImageUpload";
 import { Separator } from "./ui/separator";
@@ -33,7 +34,11 @@ export default function Toolbar() {
       <div className="flex items-center justify-between">
         <DeleteAlertDialog />
         <Separator className="m-2" orientation="vertical" />
-        <ImageUpload />
+        <ArcherElement id="upload">
+          <div id="upload">
+            <ImageUpload />
+          </div>
+        </ArcherElement>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import type { Images } from "@/store/imageStore";
 import useImageStore from "@/store/imageStore";
 import useSelectedStore from "@/store/selectedStore";
 import { useEffect } from "react";
+import { ArcherElement } from "react-archer";
 import ManagedImage from "./ManagedImage";
 import { Checkbox } from "./ui/checkbox";
 
@@ -27,14 +28,13 @@ export default function ImageGallery() {
 
   return (
     <div className="mb-8 flex w-full max-w-[50rem] flex-col items-center px-4">
-      <div
-        className={
-          "grid w-full grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4"
-        }
-      >
-        {images &&
-          images.length > 0 &&
-          images.map((image: Images, index: number) => (
+      {Array.isArray(images) && images.length > 0 ? (
+        <div
+          className={
+            "grid w-full grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4"
+          }
+        >
+          {images.map((image: Images, index: number) => (
             <label
               className="group relative aspect-square overflow-hidden"
               key={index}
@@ -57,7 +57,25 @@ export default function ImageGallery() {
               />
             </label>
           ))}
-      </div>
+        </div>
+      ) : (
+        <div className="inline-flex w-fit pt-10 text-left">
+          <ArcherElement
+            id="title"
+            relations={[
+              {
+                targetId: "upload",
+                targetAnchor: "bottom",
+                sourceAnchor: "right",
+                style: { strokeWidth: 4, strokeColor: "#000" },
+              },
+            ]}
+          >
+            <p className="text-8xl font-semibold">Start your gallery</p>
+          </ArcherElement>
+          <div className="basis-1/2" />
+        </div>
+      )}
     </div>
   );
 }

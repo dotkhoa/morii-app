@@ -39,7 +39,9 @@ export default function Header() {
           <DropdownMenuContent>
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onSelect={signOut}>Sign Out</DropdownMenuItem>
+            <DropdownMenuItem className="text-red-600" onSelect={signOut}>
+              Sign Out
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
