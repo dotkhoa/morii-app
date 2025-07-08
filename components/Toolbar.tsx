@@ -38,8 +38,15 @@ export default function Toolbar() {
         )}
       </div>
       <div className="flex items-center justify-between">
-        <DeleteAlertDialog />
-        <Separator className="m-2" orientation="vertical" />
+        {storedFlag ? (
+          <div className="flex h-full items-center justify-between">
+            <DeleteAlertDialog />
+            <Separator className="m-2" orientation="vertical" />
+            <div />
+          </div>
+        ) : (
+          <></>
+        )}
         <ArcherElement id="upload">
           <div id="upload">
             <ImageUpload />
