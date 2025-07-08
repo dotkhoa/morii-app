@@ -141,6 +141,8 @@ export async function deleteImage(
   images: Images[],
   clearSelectedIds: () => void,
 ) {
+  const imageCount = images.length;
+
   const storageResults = await Promise.all(
     images.map((img) =>
       supabase.storage
@@ -174,7 +176,9 @@ export async function deleteImage(
   if (images.length < 1) {
     localStorage.setItem("hasImages", "false");
   }
-  toast.success("Image(s) deleted successfully.");
+  toast.success(
+    `${imageCount > 1 ? imageCount : ""} Image${imageCount > 1 ? "s" : ""} deleted successfully.`,
+  );
   const refreshed = await fetchImages(userId);
   setImage(refreshed || []);
   clearSelectedIds();
