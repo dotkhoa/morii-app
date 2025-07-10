@@ -1,8 +1,6 @@
 import { signOut } from "@/lib/auth";
 import { useAuth } from "@/lib/authContext";
-import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Button } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +12,6 @@ import {
 
 export default function Header() {
   const { user, loading } = useAuth();
-  const router = useRouter();
 
   const avatarImage = user?.user_metadata.avatar_url;
   const name = user?.user_metadata.name;
@@ -45,14 +42,7 @@ export default function Header() {
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
-        <div>
-          <Button
-            className={"hover:cursor-pointer"}
-            onClick={() => router.push("/login")}
-          >
-            {"Sign-In"}
-          </Button>
-        </div>
+        <></>
       )}
     </header>
   );
