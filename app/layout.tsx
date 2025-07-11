@@ -5,7 +5,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Morii",
-  description: "Share photos with friends.",
+  description:
+    "Upload, browse, and delete images in a simple gallery powered by Supabase.",
 };
 
 export default function RootLayout({
