@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants, MotionButton } from "@/components/ui/button";
 import { useAuth } from "@/lib/authContext";
 import { deleteImage } from "@/lib/images";
 import useImageStore from "@/store/imageStore";
@@ -24,9 +24,13 @@ export function DeleteAlertDialog() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button disabled={selectedIds.size === 0}>
+        <MotionButton
+          disabled={selectedIds.size === 0}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.8 }}
+        >
           <Trash2 />
-        </Button>
+        </MotionButton>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

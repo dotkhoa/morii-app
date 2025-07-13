@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import useImageStore from "@/store/imageStore";
+import { AnimatePresence, motion } from "motion/react";
 import { useMemo } from "react";
 import { ArcherElement } from "react-archer";
 import { DeleteAlertDialog } from "./DeleteAlertDialog";
@@ -23,10 +24,22 @@ export default function Toolbar() {
     <div className="flex w-full justify-between px-4">
       <div>
         {image.length >= 1 ? (
-          <Button
-            className="w-16 font-mono"
-            variant="outline"
-          >{`${imageCount}/10`}</Button>
+          <Button className="w-16 overflow-hidden font-mono" variant="counter">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={imageCount}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -20, opacity: 0 }}
+                transition={{
+                  duration: 0.2,
+                }}
+              >
+                {imageCount}
+              </motion.div>
+            </AnimatePresence>
+            <div>/10</div>
+          </Button>
         ) : (
           <></>
         )}

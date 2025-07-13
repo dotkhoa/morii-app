@@ -2,7 +2,7 @@ import { Upload } from "@/hooks/image-upload";
 import useImageStore from "@/store/imageStore";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { Button } from "./ui/button";
+import { MotionButton } from "./ui/button";
 import {
   Dialog,
   DialogContent,
@@ -29,13 +29,14 @@ export default function ImageUploaded() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button
-          className={"hover:cursor-pointer"}
+        <MotionButton
           onClick={() => setIsOpen(true)}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.8 }}
         >
           <Plus />
           Upload
-        </Button>
+        </MotionButton>
       </DialogTrigger>
       <DialogContent className="flex flex-col">
         <DialogHeader>
