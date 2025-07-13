@@ -32,8 +32,11 @@ export function DeleteAlertDialog() {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            image(s).
+            Are you sure you want to delete the{" "}
+            {selectedIds.size > 1 ? selectedIds.size : " "} selected image
+            {selectedIds.size > 1 ? "s" : ""}?
+            <br />
+            This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
