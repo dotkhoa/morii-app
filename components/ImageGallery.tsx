@@ -19,14 +19,14 @@ export default function ImageGallery() {
   useEffect(() => {
     if (!user) return;
 
+    clearSelectedIds();
     const getImages = async () => {
-      clearSelectedIds();
-      const images = await fetchImages(user?.id);
+      const images = await fetchImages(user.id);
       setImage(images || []);
     };
 
     getImages();
-  }, [user]);
+  }, [user, setImage]);
 
   return (
     <div className="mb-8 flex w-full max-w-[50rem] flex-col items-center px-4">
@@ -36,10 +36,10 @@ export default function ImageGallery() {
             "grid w-full grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4"
           }
         >
-          {images.map((image: Images, index: number) => (
+          {images.map((image: Images) => (
             <label
               className="group relative aspect-square overflow-hidden"
-              key={index}
+              key={image.id}
             >
               <div
                 className={`transition-opacity ${selectedIds.has(image) ? "opacity-100" : "opacity-0"} group-hover:opacity-100`}
@@ -53,7 +53,6 @@ export default function ImageGallery() {
               <ManagedImage
                 src={image.url}
                 fill
-                priority
                 className="object-cover select-none"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
