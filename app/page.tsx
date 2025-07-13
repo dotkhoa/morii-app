@@ -3,7 +3,7 @@
 import Header from "@/components/Header";
 import ImageGallery from "@/components/ImageGallery";
 import Toolbar from "@/components/Toolbar";
-import { Button } from "@/components/ui/button";
+import { MotionButton } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import { useAuth } from "@/lib/authContext";
 import dynamic from "next/dynamic";
@@ -46,12 +46,14 @@ export default function Home() {
             </div>
           </div>
           <div>
-            <Button
-              className={"p-6 text-lg hover:cursor-pointer"}
+            <MotionButton
+              className={"p-6 text-lg"}
               onClick={() => router.push("/login")}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.8 }}
             >
               {"Sign In"}
-            </Button>
+            </MotionButton>
           </div>
         </div>
       )}

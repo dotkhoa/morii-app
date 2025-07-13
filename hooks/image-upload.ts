@@ -2,6 +2,7 @@ import { supabase } from "@/lib/auth";
 import { useAuth } from "@/lib/authContext";
 import { fetchImages } from "@/lib/images";
 import useImageStore from "@/store/imageStore";
+import useSelectedStore from "@/store/selectedStore";
 import { useCallback, useEffect, useState } from "react";
 import {
   type FileError,
@@ -38,6 +39,7 @@ const Upload = (options: UploadOptions) => {
 
   const { user } = useAuth();
   const { setImage } = useImageStore();
+  const { clearSelectedIds } = useSelectedStore();
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -120,6 +122,7 @@ const Upload = (options: UploadOptions) => {
     }
 
     setFiles(newFiles);
+    clearSelectedIds();
 
     const images = await fetchImages(user?.id);
     setImage(images || []);
