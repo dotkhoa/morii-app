@@ -38,7 +38,8 @@ export default function Toolbar() {
                 {imageCount}
               </motion.div>
             </AnimatePresence>
-            <div>/10</div>
+            <div className="px-1">/</div>
+            <div>10</div>
           </Button>
         ) : (
           <></>
