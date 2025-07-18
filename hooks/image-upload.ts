@@ -79,8 +79,6 @@ const Upload = (options: UploadOptions) => {
   const onUpload = useCallback(async () => {
     setLoading(true);
 
-    // [Joshen] This is to support handling partial successes
-    // If any files didn't upload for any reason, hitting "Upload" again will only upload the files that had errors
     const filesWithErrors = errors.map((x) => x.name);
     const filesToUpload =
       filesWithErrors.length > 0
@@ -106,7 +104,6 @@ const Upload = (options: UploadOptions) => {
     );
 
     const responseErrors = responses.filter((x) => x.message !== undefined);
-    // if there were errors previously, this function tried to upload the files again so we should clear/overwrite the existing errors.
     setErrors(responseErrors);
 
     const responseSuccesses = responses.filter((x) => x.message === undefined);
@@ -135,7 +132,6 @@ const Upload = (options: UploadOptions) => {
       setErrors([]);
     }
 
-    // If the number of files doesn't exceed the maxFiles parameter, remove the error 'Too many files' from each file
     if (files.length <= maxFiles) {
       let changed = false;
       const newFiles = files.map((file) => {
